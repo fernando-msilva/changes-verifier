@@ -1,0 +1,14 @@
+version: '1.0'
+kind: step-type
+metadata:
+  name: justforpersonalstudies/modified-files
+  version: 0.0.1
+  isPublic: true
+  latest: true
+spec:
+  steps:
+    test:
+      title: "just a test"
+      image: alpine
+      commands:
+        - echo "hello world"
