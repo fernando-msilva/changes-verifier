@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"os"
 )
@@ -12,14 +13,14 @@ type FilesChangeds struct {
 	} `json:"head_commit"`
 }
 
-func compareFiles(changeds []string, fileName string) {
+func compareFiles(changeds []string, fileName string) string {
 	for _, value := range changeds {
 		if value == fileName {
-			os.Exit(0)
+			return "true"
 		}
 	}
 
-	os.Exit(1)
+	return "false"
 }
 
 func main() {
@@ -29,5 +30,5 @@ func main() {
 	var teste FilesChangeds
 	json.Unmarshal(byteValue, &teste)
 	result := teste.HeadCommit.Modified
-	compareFiles(result, os.Args[1])
+	fmt.Println(compareFiles(result, os.Args[1]))
 }
