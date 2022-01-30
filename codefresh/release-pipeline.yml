@@ -35,4 +35,4 @@ steps:
       release_tag: ${{CF_BRANCH}}
       draft: true
       files:
-        - '${{CF_VOLUME_PATH}}/${{CF_REPO_NAME}}/src/modified'
+        - '${{CF_VOLUME_PATH}}/${{CF_REPO_NAME}}/src/changes-verifier'
