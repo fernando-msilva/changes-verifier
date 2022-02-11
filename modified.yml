@@ -33,7 +33,7 @@ spec:
       environment:
         - 'FILE_NAME=${{FILE_NAME}}'
       commands:
-        - wget -O /bin/changes-verifier https://github.com/fernando-msilva/changes-verifier/releases/download/v0.0.2/changes-verifier
+        - wget -O /bin/changes-verifier https://github.com/fernando-msilva/changes-verifier/releases/download/v0.0.3/changes-verifier
         - chmod +x /bin/changes-verifier
         - echo "verify if $FILE_NAME has changed"
-        - cf_export HAS_CHANGES=$(changes-verifier $FILE_NAME)
+        - cf_export HAS_CHANGES=$(changes-verifier --compare $FILE_NAME)
