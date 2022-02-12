@@ -36,4 +36,9 @@ spec:
         - wget -O /bin/changes-verifier https://github.com/fernando-msilva/changes-verifier/releases/download/v0.0.3/changes-verifier
         - chmod +x /bin/changes-verifier
         - echo "verify if $FILE_NAME has changed"
-        - cf_export HAS_CHANGES=$(changes-verifier --compare $FILE_NAME)
+        - >-
+          if [ ! -z "$FILE_NAME" ];then
+            cf_export HAS_CHANGES=$(changes-verifier --compare $FILE_NAME)
+          else
+            cf_export HAS_CHANGES=$(changes-verifier)
+          fi
