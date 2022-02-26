@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strings"
 )
 
 type FilesChangeds struct {
@@ -14,9 +15,29 @@ type FilesChangeds struct {
 	} `json:"head_commit"`
 }
 
+func compare(changeds []string, arg string) string {
+	result := "false"
+	if arg[len(arg)-1:] == "/" {
+		result = comparePaths(changeds, arg)
+	} else {
+		result = compareFiles(changeds, arg)
+	}
+
+	return result
+}
+
 func compareFiles(changeds []string, fileName string) string {
 	for _, value := range changeds {
 		if value == fileName {
+			return "true"
+		}
+	}
+	return "false"
+}
+
+func comparePaths(changeds []string, path string) string {
+	for _, value := range changeds {
+		if strings.Contains(value, path) {
 			return "true"
 		}
 	}
@@ -41,10 +62,10 @@ func main() {
 	var changes FilesChangeds
 	json.Unmarshal(byteValue, &changes)
 	result := changes.HeadCommit.Modified
-	compare := flag.String("compare", "", "define operation mode")
+	compareValue := flag.String("compare", "", "define operation mode")
 	flag.Parse()
-	if *compare != "" {
-		fmt.Println(compareFiles(result, *compare))
+	if *compareValue != "" {
+		fmt.Println(compare(result, *compareValue))
 	} else {
 		fmt.Println(returnModifieds(result))
 	}

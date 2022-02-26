@@ -5,7 +5,7 @@ metadata:
   description: 'Step to check if a file has changed'
   sources:
     - 'https://github.com/fernando-msilva/changes-verifier'
-  version: 0.0.1
+  version: 0.1.0
   isPublic: true
   latest: true
 spec:
@@ -16,9 +16,7 @@ spec:
       "type": "object",
       "additionalProperties": false,
       "patterns": [],
-      "required": [
-        "FILE_NAME"
-      ],
+      "required": [],
       "properties": {
         "FILE_NAME": {
           "type": "string",
@@ -26,14 +24,39 @@ spec:
         }
       }
     }
+  returns: |-
+    {
+      "definitions": {},
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "type": "object",
+      "additionalProperties": false,
+      "patterns": [],
+      "required": [
+        MODIFIED
+      ],
+      "properties": {
+        "MODIFIED": {
+          "type": "string",
+          "description": "step output"
+        }
+      }
+    }
   steps:
     verify:
-      title: "just a test"
+      title: "changes verify"
       image: busybox:1.35.0
       environment:
-        - 'FILE_NAME=${{FILE_NAME}}'
+        - FILE_NAME=${{FILE_NAME}}
       commands:
-        - wget -O /bin/changes-verifier https://github.com/fernando-msilva/changes-verifier/releases/download/v0.0.3/changes-verifier
+        - wget -O /bin/changes-verifier https://github.com/fernando-msilva/changes-verifier/releases/download/v0.1.0/changes-verifier
         - chmod +x /bin/changes-verifier
-        - echo "verify if $FILE_NAME has changed"
-        - cf_export HAS_CHANGES=$(changes-verifier --compare $FILE_NAME)
+        - echo "verify if $FILE_NAME has changes"
+        - >-
+          if [ ! -z "$FILE_NAME" ];then
+            cf_export HAS_CHANGES=$(changes-verifier --compare $FILE_NAME)
+          else
+            cf_export HAS_CHANGES=$(changes-verifier)
+          fi
+          MODIFIED=$HAS_CHANGES
+          export MODIFIED
+          cf_export MODIFIED
