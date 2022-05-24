@@ -70,5 +70,4 @@ func main() {
 	} else {
 		fmt.Println(returnModifieds(result))
 	}
-	fmt.Println(result)
 }
