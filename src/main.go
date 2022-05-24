@@ -12,6 +12,7 @@ import (
 type FilesChangeds struct {
 	HeadCommit struct {
 		Modified []string `json:"modified"`
+		Added    []string `json:"added"`
 	} `json:"head_commit"`
 }
 
@@ -61,7 +62,7 @@ func main() {
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 	var changes FilesChangeds
 	json.Unmarshal(byteValue, &changes)
-	result := changes.HeadCommit.Modified
+	result := append(changes.HeadCommit.Modified, changes.HeadCommit.Added...)
 	compareValue := flag.String("compare", "", "define operation mode")
 	flag.Parse()
 	if *compareValue != "" {
@@ -69,4 +70,5 @@ func main() {
 	} else {
 		fmt.Println(returnModifieds(result))
 	}
+	fmt.Println(result)
 }
